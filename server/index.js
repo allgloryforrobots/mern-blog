@@ -1,6 +1,7 @@
 import express from 'express'
 import mongoose from 'mongoose'
 import multer from 'multer'
+import cors from 'cors'
 
 
 import { registerValidation, loginValidation, postCreateValidation } from './validations.js'
@@ -12,6 +13,7 @@ mongoose.connect('mongodb+srv://allgloryforrobots:02121991a@cluster0.zjvmd.mongo
 .catch((err) => console.log('DB error', err))
 
 const app = express() 
+app.use(cors())
 
 const storage = multer.diskStorage({
     destination: (_, __, cb) => {
@@ -26,6 +28,7 @@ const upload = multer({ storage })
 
 app.use(express.json())
 app.use('/uploads', express.static('uploads'))
+
 
 app.post('/auth/login', loginValidation, handleValidationErrors, UserController.login)
 app.post('/auth/reqister', registerValidation, handleValidationErrors, UserController.register)
