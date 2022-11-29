@@ -1,14 +1,22 @@
-import React from 'react';
-import Button from '@mui/material/Button';
+import React from 'react'
+import Button from '@mui/material/Button'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 
-import styles from './Header.module.scss';
-import Container from '@mui/material/Container';
+import styles from './Header.module.scss'
+import Container from '@mui/material/Container'
+import { selectIsAuth, logout } from "../../redux/slices/auth"
 
 export const Header = () => {
-  const isAuth = false;
 
-  const onClickLogout = () => {};
+  const dispatch = useDispatch();
+  const isAuth = useSelector(selectIsAuth);
+
+  const onClickLogout = () => {
+    if (window.confirm('Are you sure you want to log')) {
+      dispatch(logout())
+    }
+  };
 
   return (
     <div className={styles.root}>
