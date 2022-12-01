@@ -62,7 +62,6 @@ export const login = async (req, res) => {
 
         const isValidPass = await bcrypt.compare(req.body.password, user._doc.passwordHash)
 
-        console.log(req.body.password, user._doc.passwordHash)
         if (!isValidPass) {
             return res.status(404).json({
                 message: 'Неверный логин или пароль'
