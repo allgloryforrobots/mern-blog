@@ -30,7 +30,8 @@ export const Registration = () => {
     defaultValues: {
       fullName: 'Тест 2',
       email: 'test2@test.ru',
-      password: '1234'
+      password: '1234',
+      avatarUrl: 'https://mui.com/static/images/avatar/1.jpg'
     },
     mode: 'onChange'
   })

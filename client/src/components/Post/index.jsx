@@ -32,33 +32,49 @@ export const Post = ({
 
   const onClickRemove = () => {};
 
+
   return (
+
     <div className={clsx(styles.root, { [styles.rootFull]: isFullPost })}>
-      {isEditable && (
-        <div className={styles.editButtons}>
-          <Link to={`/posts/${_id}/edit`}>
-            <IconButton color="primary">
-              <EditIcon />
+
+      {
+        isEditable && (
+          <div className={styles.editButtons}>
+
+            <Link to={`/posts/${_id}/edit`}>
+              <IconButton color="primary">
+                <EditIcon />
+              </IconButton>
+            </Link>
+
+            <IconButton onClick={onClickRemove} color="secondary">
+              <DeleteIcon />
             </IconButton>
-          </Link>
-          <IconButton onClick={onClickRemove} color="secondary">
-            <DeleteIcon />
-          </IconButton>
-        </div>
-      )}
+
+          </div>
+        )
+      }
+
       {imageUrl && (
+
         <img
           className={clsx(styles.image, { [styles.imageFull]: isFullPost })}
-          src={imageUrl}
+          src={'http://localhost:4444' + imageUrl}
           alt={title}
         />
+
       )}
+
       <div className={styles.wrapper}>
+
         <UserInfo {...user} additionalText={createdAt} />
+
         <div className={styles.indention}>
+
           <h2 className={clsx(styles.title, { [styles.titleFull]: isFullPost })}>
             {isFullPost ? title : <Link to={`/posts/${_id}`}>{title}</Link>}
           </h2>
+
           <ul className={styles.tags}>
             {tags.map((name) => (
               <li key={name}>
@@ -66,7 +82,9 @@ export const Post = ({
               </li>
             ))}
           </ul>
+
           {children && <div className={styles.content}>{children}</div>}
+
           <ul className={styles.postDetails}>
             <li>
               <EyeIcon />
@@ -77,7 +95,9 @@ export const Post = ({
               <span>{commentsCount}</span>
             </li>
           </ul>
+
         </div>
+
       </div>
     </div>
   );
