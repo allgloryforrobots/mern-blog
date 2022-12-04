@@ -2,13 +2,16 @@ import express from 'express'
 import mongoose from 'mongoose'
 import multer from 'multer'
 import cors from 'cors'
-
+import * as dotenv from 'dotenv'
 
 import { registerValidation, loginValidation, postCreateValidation } from './validations.js'
 import { UserController, PostController }  from './controllers/index.js' 
 import { checkAuth, handleValidationErrors } from './utils/index.js' 
 
-mongoose.connect('mongodb+srv://allgloryforrobots:02121991a@cluster0.zjvmd.mongodb.net/blog?retryWrites=true&w=majority')
+dotenv.config()
+console.log(process.env)
+
+mongoose.connect(process.env.MONGO_DB_URI)
 .then(() => console.log('DB ok'))
 .catch((err) => console.log('DB error', err))
 
