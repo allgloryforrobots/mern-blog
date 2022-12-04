@@ -85,11 +85,11 @@ export const remove = async (req, res) => {
                     })
                 }
 
-                if (!doc) {
-                    return res.status(404).json({
-                        message: 'Статья не найдена'
-                    })
-                }
+                // if (!doc) {
+                //     return res.status(404).json({
+                //         message: 'Статья не найдена'
+                //     })
+                // }
 
                 res.json({
                     success: true

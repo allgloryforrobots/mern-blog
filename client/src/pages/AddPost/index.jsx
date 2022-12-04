@@ -9,10 +9,13 @@ import axios from '../../axios'
 import 'easymde/dist/easymde.min.css'
 import styles from './AddPost.module.scss'
 import { selectIsAuth } from "../../redux/slices/auth"
-import {useSelector } from 'react-redux'
-import { Navigate, useNavigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
+import { Navigate, useNavigate, useParams } from 'react-router-dom'
+
 
 export const AddPost = () => {
+
+  const { id } = useParams()
 
   const isAuth = useSelector(selectIsAuth)
   const navigate = useNavigate()
@@ -22,13 +25,11 @@ export const AddPost = () => {
   const [tags, setTags] = React.useState('')
   const [imageUrl, setImageUrl] = React.useState('')
   const inputFileRef = React.useRef(null)
-
   const [loading, setLoading] = React.useState(false)
+  const isEditing = Boolean(id)
 
 
   const handleChangeFile = async (event) => {
-
-    console.log(event.target.files)
 
     try {
 
@@ -55,20 +56,34 @@ export const AddPost = () => {
 
   const onSubmit = async () => {
 
+    const tagsArr = tags.trim().split(',');
+    let tagsArrWithoutSpace = [];
+
+    tagsArr.forEach(tag => {
+      tagsArrWithoutSpace.push(tag.trim())
+    })
+
+
     try {
 
       setLoading(true)
       const fields = {
         title,
         imageUrl,
-        tags,
+        tags: tagsArrWithoutSpace,
         text
       }
 
-      const { data } = await axios.post('/posts', fields) 
+      const { data } = 
+      isEditing 
+      ? await axios.patch(`/posts/${id}`, fields) 
+      : await axios.post('/posts', fields) 
 
-      const id = data._id
-      navigate(`/posts/${id}`)
+      const _id = isEditing
+      ? id
+      : data._id
+
+      navigate(`/posts/${_id}`)
 
 
     } catch (err) {
@@ -77,6 +92,27 @@ export const AddPost = () => {
     }
 
   }
+
+  React.useEffect(() => {
+
+    if (id) {
+
+      axios.get(`/posts/${id}`).then(({ data }) => {
+
+        setTags(data.tags.join(", "))
+        setTitle(data.title)
+        setText(data.text)
+        setImageUrl(data.imageUrl)
+
+      })
+      .catch(err => {
+        console.warn(err)
+        alert('Ошибка при получении статьи!')
+      })
+
+    }
+
+  }, [])
 
   const options = React.useMemo(
     () => ({
@@ -135,6 +171,7 @@ export const AddPost = () => {
         variant="standard" 
         placeholder="Тэги" 
         fullWidth 
+        value={tags}
         onChange={((e) => setTags(e.target.value))}
       />
 
@@ -143,7 +180,7 @@ export const AddPost = () => {
       <div className={styles.buttons}>
 
         <Button onClick={onSubmit} size="large" variant="contained">
-          Опубликовать
+          { isEditing ? 'Сохранить' : 'Опубликовать' }
         </Button>
 
         <a href="/">
