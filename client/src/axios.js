@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+
+// console.log(process.env)
 const instance = axios.create({
     baseURL: 'http://localhost:4444'
 })
